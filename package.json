@@ -10,5 +10,8 @@
     "@types/express": "^4.17.11",
     "@types/node": "^15.0.0",
     "express": "^4.17.1"
+  },
+  "scripts": {
+      "node": "node ./src/app.ts"
   }
 }
