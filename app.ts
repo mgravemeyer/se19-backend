@@ -11,6 +11,16 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect();
 client.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ extended: true }));
+
+app.use(
+    express.urlencoded({
+        extended: true
+    })
+)
+
 app.get('/hello', (req, res) => {
     res.send('Hello World!')
 })
@@ -20,37 +30,15 @@ app.listen(port, () => {
 })
 
 app.get('/list', (req, res) => {
-    req.on('end', () => {
-        getListMongo();
-        res.end();
-    })
-    res.send('Here is the list!')
-})
+        client.db("se19app").collection('list').find().toArray().then(results => {
+            res.send(results)
+        }).catch(error =>
+            res.send(error)
+        );
+});
 
 app.post('/list', (req, res) => {
-        let data = '';
-        req.on('data', chunk => {
-            data += chunk;
-        })
-        req.on('end', () => {
-            addItemMongo(JSON.parse(data).name);
-            res.end();
-        })
-    res.send('Added Item in List!')
-})
-
-const addItemMongo = async (data) => {
-    try {
-        client.db("se19app").collection('list').insertOne({'name': data})
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-const getListMongo = async () => {
-    try {
-        client.db("se19app").collection('list').find().forEach((item) => console.log(item))
-    } catch (err) {
-        console.log(err);
-    }
-}
+    client.db("se19app").collection('list').insertOne({'name': req.body.name}).then(
+        res.send("Ok")
+    )
+});
