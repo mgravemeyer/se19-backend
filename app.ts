@@ -3,6 +3,13 @@ const http = require('http');
 var express = require('express'), app = express(), port = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ extended: true }));
+var cors = require('cors');
+app.use(cors());
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 ////-------------- mongodb setup --------------
 const MongoClient = require('mongodb').MongoClient;
