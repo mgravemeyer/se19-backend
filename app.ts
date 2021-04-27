@@ -12,16 +12,15 @@ app.use(function(req, res, next) {
 });
 
 ////-------------- mongodb setup --------------
+const mongodb = require('mongodb')
+
+const ObjectID = require("mongodb").ObjectID;
+
 const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://test-user:Jnsgc7y.EWM4X@se19cluster.8tdv4.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect();
 client.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
-app.listen(port, () => {
-    console.log(`App listening at port:${port}`)
-})
-
 //-------------- routes --------------
 app.get('/hello', (req, res) => {
     res.send('Hello World!')
@@ -35,7 +34,7 @@ app.get('/list', (req, res) => {
         );
 });
 
-app.post('/list', (req, res) => {
+app.post('/listAdd', (req, res) => {
     if (req.body.name !== undefined) {
         client.db("se19app").collection('list').insertOne({'name': req.body.name}).then(
             res.send("Ok")
@@ -45,3 +44,29 @@ app.post('/list', (req, res) => {
         res.send("'name' key was not found in json")
     }
 });
+
+app.post('/listRemove', (req, res) => {
+    if (req.body.name !== undefined) {
+        client.db("se19app").collection('list').remove({_id: new mongodb.ObjectID(req.body.id)}, function (err, result) {
+            if (err) {
+                res.status(400)
+                res.send(`error: ${err}`)
+            } else {
+                res.json(result);
+            }
+        })
+    } else {
+        res.status(400)
+        res.send("'id' key was not found in json")
+    }
+});
+
+app.post('/listRemoveAll', (req, res) => {
+        client.db("se19app").collection('list').drop().then(
+            res.send("Ok")
+        )
+});
+
+app.listen(port, () => {
+    console.log(`App listening at port:${port}`)
+})
