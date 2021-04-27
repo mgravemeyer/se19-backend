@@ -11,7 +11,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect();
 client.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-app.get('/', (req, res) => {
+app.get('/hello', (req, res) => {
     res.send('Hello World!')
 })
 
