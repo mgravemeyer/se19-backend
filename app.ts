@@ -38,7 +38,12 @@ app.get('/list', (req, res) => {
 });
 
 app.post('/list', (req, res) => {
-    client.db("se19app").collection('list').insertOne({'name': req.body.name}).then(
-        res.send("Ok")
-    )
+    if (req.body.name !== undefined) {
+        client.db("se19app").collection('list').insertOne({'name': req.body.name}).then(
+            res.send("Ok")
+        )
+    } else {
+        res.status(400)
+        res.send("'name' key was not found in json")
+    }
 });
