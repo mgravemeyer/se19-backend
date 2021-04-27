@@ -1,32 +1,23 @@
-// import { createServer, IncomingMessage, ServerResponse } from 'http';
-
+//-------------- express/node setup --------------
 const http = require('http');
-
 var express = require('express'), app = express(), port = process.env.PORT || 3000;
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ extended: true }));
 
-//start the mongodb connection
+////-------------- mongodb setup --------------
 const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://test-user:Jnsgc7y.EWM4X@se19cluster.8tdv4.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect();
 client.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json({ extended: true }));
-
-app.use(
-    express.urlencoded({
-        extended: true
-    })
-)
-
-app.get('/hello', (req, res) => {
-    res.send('Hello World!')
-})
-
 app.listen(port, () => {
     console.log(`App listening at port:${port}`)
+})
+
+//-------------- routes --------------
+app.get('/hello', (req, res) => {
+    res.send('Hello World!')
 })
 
 app.get('/list', (req, res) => {
