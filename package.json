@@ -1,6 +1,10 @@
 {
   "name": "react-api-node",
   "version": "1.0.0",
+  "engines": {
+    "node": "15.14.0"
+  },
+  "private": true,
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
