@@ -8,6 +8,8 @@ var express = require('express'), app = express(), port = process.env.PORT || 30
 const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://test-user:Jnsgc7y.EWM4X@se19cluster.8tdv4.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+client.connect();
+client.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
@@ -38,20 +40,17 @@ app.post('/list', (req, res) => {
 })
 
 const addItemMongo = async (data) => {
-    const connect = await client.connect(err => {
-        const collection = client.db("se19app").collection('list').insertOne({'name': data})
-            .then(result => {
-                console.log(result)
-                client.close();
-            })
-    })
+    try {
+        client.db("se19app").collection('list').insertOne({'name': data})
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 const getListMongo = async () => {
-    const connect = await client.connect(err => {
-        const collection = client.db("se19app").collection('list').find().forEach( (item) => console.log(item) )
-            .then(result => {
-                client.close();
-            })
-    })
+    try {
+        client.db("se19app").collection('list').find().forEach((item) => console.log(item))
+    } catch (err) {
+        console.log(err);
+    }
 }
