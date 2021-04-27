@@ -18,6 +18,10 @@ app.listen(port, () => {
 })
 
 app.get('/list', (req, res) => {
+    req.on('end', () => {
+        getListMongo();
+        res.end();
+    })
     res.send('Here is the list!')
 })
 
@@ -38,6 +42,15 @@ const addItemMongo = async (data) => {
         const collection = client.db("se19app").collection('list').insertOne({'name': data})
             .then(result => {
                 console.log(result)
+                client.close();
+            })
+    })
+}
+
+const getListMongo = async () => {
+    const connect = await client.connect(err => {
+        const collection = client.db("se19app").collection('list').find().forEach( (item) => console.log(item) )
+            .then(result => {
                 client.close();
             })
     })
