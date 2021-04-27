@@ -18,6 +18,6 @@
     "nodemon": "^2.0.7"
   },
   "scripts": {
-    "node": "node ./src/app.ts"
+    "start": "node ./src/app.ts"
   }
 }
