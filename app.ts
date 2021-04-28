@@ -36,9 +36,9 @@ app.get('/list', (req, res) => {
 
 app.post('/listAdd', (req, res) => {
     if (req.body.name !== undefined) {
-        client.db("se19app").collection('list').insertOne({'_id': uuid(),'name': req.body.name}).then(
-            res.send("Ok")
-        )
+        const id = uuid();
+        client.db("se19app").collection('list').insertOne({'_id': id,'name': req.body.name}).then(
+            res.json({id:id}));
     } else {
         res.status(400)
         res.send("'name' key was not found in json")
