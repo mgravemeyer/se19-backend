@@ -11,7 +11,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-////-------------- mongodb setup --------------
+//-------------- mongodb setup --------------
 const mongodb = require('mongodb')
 
 const ObjectID = require("mongodb").ObjectID;
@@ -36,7 +36,7 @@ app.get('/list', (req, res) => {
 
 app.post('/listAdd', (req, res) => {
     if (req.body.name !== undefined) {
-        client.db("se19app").collection('list').insertOne({'name': req.body.name}).then(
+        client.db("se19app").collection('list').insertOne({'_id': '123','name': req.body.name}).then(
             res.send("Ok")
         )
     } else {
