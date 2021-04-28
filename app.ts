@@ -47,7 +47,7 @@ app.post('/listAdd', (req, res) => {
 
 app.post('/listRemove', (req, res) => {
     if (req.body.name !== undefined) {
-        client.db("se19app").collection('list').remove({_id: new mongodb.ObjectID(req.body.id)}, function (err, result) {
+        client.db("se19app").collection('list').remove({_id: (req.body.id)}, function (err, result) {
             if (err) {
                 res.status(400)
                 res.send(`error: ${err}`)
@@ -60,6 +60,17 @@ app.post('/listRemove', (req, res) => {
         res.send("'id' key was not found in json")
     }
 });
+
+function uuid(){
+    var dt = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (dt + Math.random()*16)%16 | 0;
+        dt = Math.floor(dt/16);
+        return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+    });
+    return uuid;
+}
+
 
 app.post('/listRemoveAll', (req, res) => {
         client.db("se19app").collection('list').drop().then(
