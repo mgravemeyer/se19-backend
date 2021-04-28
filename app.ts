@@ -22,8 +22,8 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect();
 client.on('error', console.error.bind(console, 'MongoDB connection error:'));
 //-------------- routes --------------
-app.get('/hello', (req, res) => {
-    res.send('Hello World!')
+app.get('/', (req, res) => {
+    res.send('Hello World! Available endpoints: \list \listAdd \listRemoveAll \listRemove');
 })
 
 app.get('/list', (req, res) => {
@@ -36,7 +36,7 @@ app.get('/list', (req, res) => {
 
 app.post('/listAdd', (req, res) => {
     if (req.body.name !== undefined) {
-        client.db("se19app").collection('list').insertOne({'_id': '123','name': req.body.name}).then(
+        client.db("se19app").collection('list').insertOne({'_id': uuid(),'name': req.body.name}).then(
             res.send("Ok")
         )
     } else {
@@ -46,7 +46,7 @@ app.post('/listAdd', (req, res) => {
 });
 
 app.post('/listRemove', (req, res) => {
-    if (req.body.name !== undefined) {
+    if (req.body.id !== undefined) {
         client.db("se19app").collection('list').remove({_id: (req.body.id)}, function (err, result) {
             if (err) {
                 res.status(400)
@@ -61,6 +61,12 @@ app.post('/listRemove', (req, res) => {
     }
 });
 
+app.post('/listRemoveAll', (req, res) => {
+        client.db("se19app").collection('list').drop().then(
+            res.send("Ok")
+        )
+});
+
 function uuid(){
     var dt = new Date().getTime();
     var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -70,13 +76,6 @@ function uuid(){
     });
     return uuid;
 }
-
-
-app.post('/listRemoveAll', (req, res) => {
-        client.db("se19app").collection('list').drop().then(
-            res.send("Ok")
-        )
-});
 
 app.listen(port, () => {
     console.log(`App listening at port:${port}`)
