@@ -45,7 +45,7 @@ app.post('/listAdd', (req, res) => {
     }
 });
 
-app.post('/listRemove', (req, res) => {
+app.post('/listRemoveItem', (req, res) => {
     if (req.body.id !== undefined) {
         client.db("se19app").collection('list').remove({_id: (req.body.id)}, function (err, result) {
             if (err) {
@@ -61,7 +61,7 @@ app.post('/listRemove', (req, res) => {
     }
 });
 
-app.post('/listRemoveAll', (req, res) => {
+app.get('/listRemoveAll', (req, res) => {
         client.db("se19app").collection('list').drop().then(
             res.send("Ok")
         )
