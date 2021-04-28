@@ -23,7 +23,7 @@ client.connect();
 client.on('error', console.error.bind(console, 'MongoDB connection error:'));
 //-------------- routes --------------
 app.get('/', (req, res) => {
-    res.send('Hello World! Available endpoints: \list \listAdd \listRemoveAll \listRemove');
+    res.send('Hello World! Available endpoints: </br><strong>\\list {get}</br>\\listAdd {post: name}</br>\\listRemoveAll {get}</br>\\listRemove {post: id}</strong>');
 })
 
 app.get('/list', (req, res) => {
